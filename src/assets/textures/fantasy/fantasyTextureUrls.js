@@ -12,12 +12,11 @@ import pieceRedNormal from './piece/red/CorrugatedMetalPanel01_1K_Normal.png';
 import pieceRedRoughness from './piece/red/CorrugatedMetalPanel01_1K_Roughness.png';
 import pieceRedHeight from './piece/red/CorrugatedMetalPanel01_1K_Height.png';
 
-// 奇幻风格黑色棋子（刷铁风格，含 metallic）
-import pieceBlackBaseColor from './piece/black/BrushedIron02_1K_BaseColor.png';
-import pieceBlackNormal from './piece/black/BrushedIron02_1K_Normal.png';
-import pieceBlackRoughness from './piece/black/BrushedIron02_1K_Roughness.png';
-import pieceBlackHeight from './piece/black/BrushedIron02_1K_Height.png';
-import pieceBlackMetallic from './piece/black/BrushedIron02_1K_Metallic.png';
+// 奇幻风格黑色棋子
+import pieceBlackBaseColor from './piece/black/Granite07small_1K_BaseColor.png';
+import pieceBlackNormal from './piece/black/Granite07small_1K_Normal.png';
+import pieceBlackRoughness from './piece/black/Granite07small_1K_Roughness.png';
+import pieceBlackHeight from './piece/black/Granite07small_1K_Height.png';
 
 export const FANTASY_PBR_TEXTURES = {
   board: {
@@ -37,6 +36,5 @@ export const FANTASY_PBR_TEXTURES = {
     normal: pieceBlackNormal,
     roughness: pieceBlackRoughness,
     height: pieceBlackHeight,
-    metallic: pieceBlackMetallic
   }
 };

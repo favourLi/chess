@@ -152,9 +152,9 @@ export const SKIN_PRESETS = {
       fogFar: 42
     },
     lighting: {
-      ambient: { color: 0x9b59b6, intensity: 0.35 },
-      directional: { color: 0xe8d4ff, intensity: 0.7 },
-      point: { color: 0x00cec9, intensity: 0.65, distance: 35 }
+      ambient: { color: 0x9b59b6, intensity: 0.05 },
+      directional: { color: 0xe8d4ff, intensity: 0.03 },
+      point: { color: 0x00cec9, intensity: 0.05, distance: 35 }
     },
     board: {
       borderColor: 0x5f27cd,
