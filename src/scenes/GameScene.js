@@ -405,9 +405,27 @@ export class GameScene {
     if (this.networkMode === 'replay') return;
     if (this.networkMode === 'online' && !this.myOnlineColor) return;
 
-    // 如果已经选中了棋子，尝试移动
+    const clickedIsMine = piece?.userData?.color === this.currentPlayer;
+
+    // 已选中其它棋子：若点到己方棋子则切换选中；若点到对方棋子则尝试吃子
     if (this.selectedPiece && this.selectedPiece !== piece) {
       const mover = this.selectedPiece;
+
+      // 点己方棋子：直接切换选中（修复：不再需要点两次）
+      if (clickedIsMine) {
+        detachSelectionVisual(mover);
+        this.pieces.deselectAll();
+        this.selectedPiece = null;
+        this.clearMoveHints();
+
+        piece.material.emissive.setHex(this.animPreset.selectedEmissive);
+        this.selectedPiece = piece;
+        attachSelectionVisual(piece, this.animPreset);
+        this.showPossibleMoves(piece);
+        return;
+      }
+
+      // 点对方棋子：尝试吃子
       const result = this.isValidMove(mover, piece);
       if (result.valid) {
         detachSelectionVisual(mover);
@@ -415,22 +433,28 @@ export class GameScene {
       } else {
         this.clearMoveHints();
         detachSelectionVisual(mover);
+        this.pieces.deselectAll();
+        this.selectedPiece = null;
       }
-      this.pieces.deselectAll();
-      this.selectedPiece = null;
-    } else if (piece.userData.color === this.currentPlayer) {
+      return;
+    }
+
+    // 未选中：只能选中己方棋子
+    if (clickedIsMine) {
       if (this.selectedPiece) detachSelectionVisual(this.selectedPiece);
       this.pieces.deselectAll();
       piece.material.emissive.setHex(this.animPreset.selectedEmissive);
       this.selectedPiece = piece;
       attachSelectionVisual(piece, this.animPreset);
       this.showPossibleMoves(piece);
-    } else {
-      if (this.selectedPiece) detachSelectionVisual(this.selectedPiece);
-      this.pieces.deselectAll();
-      this.selectedPiece = null;
-      this.clearMoveHints();
+      return;
     }
+
+    // 点到对方棋子且未选中：清空选择
+    if (this.selectedPiece) detachSelectionVisual(this.selectedPiece);
+    this.pieces.deselectAll();
+    this.selectedPiece = null;
+    this.clearMoveHints();
   }
 
   boardClick() {

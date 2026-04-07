@@ -32,10 +32,17 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 100% 70% at 50% -15%, rgba(201, 162, 39, 0.14), transparent 55%),
-    radial-gradient(ellipse 60% 45% at 110% 40%, rgba(139, 21, 56, 0.1), transparent 50%),
-    radial-gradient(ellipse 50% 40% at -10% 60%, rgba(45, 106, 111, 0.08), transparent 45%),
+    /* 暗色遮罩：降低不透明度，保留可读性 */
+    linear-gradient(180deg, rgba(7, 10, 14, 0.52), rgba(7, 10, 14, 0.62)),
+    url('../assets/images/banner.jpg'),
+    /* 金红氛围光：提高强度，让暖色更可见 */
+    radial-gradient(ellipse 100% 70% at 50% -15%, rgba(201, 162, 39, 0.28), transparent 58%),
+    radial-gradient(ellipse 60% 45% at 110% 40%, rgba(139, 21, 56, 0.2), transparent 52%),
+    radial-gradient(ellipse 50% 40% at -10% 60%, rgba(45, 106, 111, 0.1), transparent 45%),
     linear-gradient(168deg, #0c0f14 0%, #151a22 38%, #0a0e12 100%);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .game-ui-home-bg::after {
