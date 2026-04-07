@@ -219,6 +219,13 @@ if (shouldServeDist) {
   app.use(express.static(distDir));
 }
 
+// EXR 环境贴图：TextureManager 默认请求 /exrs/*.exr
+// 开发时由 webpack-dev-server static(public/) 提供；生产环境在此显式映射 public/exrs -> /exrs
+const publicExrsDir = path.join(__dirname, '..', 'public', 'exrs');
+if (fs.existsSync(publicExrsDir)) {
+  app.use('/exrs', express.static(publicExrsDir));
+}
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: true, credentials: true }
