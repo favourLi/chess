@@ -1,0 +1,53 @@
+{
+  "name": "3d-chess-game",
+  "version": "1.0.0",
+  "description": "一个基于Web的3D中国象棋游戏",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "server:dev": "node server/index.js",
+    "dev:full": "concurrently -k \"npm run server:dev\" \"npm run dev\"",
+    "build": "webpack --mode production",
+    "start": "node server/index.js",
+    "build:server": "webpack --config server/webpack.config.js --mode production",
+    "test": "jest --config jest.config.cjs",
+    "lint": "eslint src --ext .js,.ts",
+    "lint:fix": "eslint src --ext .js,.ts --fix"
+  },
+  "keywords": [
+    "3d",
+    "chinese-chess",
+    "xiangqi",
+    "three.js",
+    "webgl",
+    "game"
+  ],
+  "author": "开发团队",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/preset-env": "^7.29.2",
+    "babel-loader": "^10.1.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.7.5",
+    "three": "^0.163.0",
+    "uuid": "^9.0.1",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "@types/three": "^0.163.0",
+    "css-loader": "^6.8.1",
+    "eslint": "^8.56.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.3",
+    "jest": "^29.7.0",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

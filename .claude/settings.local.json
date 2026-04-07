@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p chess)",
+      "Bash(mkdir -p ui)",
+      "Bash(npm run:*)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3001)",
+      "Bash(taskkill /F /PID 3001)",
+      "Bash(taskkill:*)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "WebSearch"
+    ]
+  }
+}
