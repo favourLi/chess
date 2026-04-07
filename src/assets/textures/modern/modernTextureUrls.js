@@ -6,16 +6,15 @@ import boardNormal from './board/Wood05_1K_Normal.png';
 import boardRoughness from './board/Wood05_1K_Roughness.png';
 import boardHeight from './board/Wood05_1K_Height.png';
 
-import pieceRedBaseColor from './piece/red/CorrugatedMetalPanel01_1K_BaseColor.png';
-import pieceRedNormal from './piece/red/CorrugatedMetalPanel01_1K_Normal.png';
-import pieceRedRoughness from './piece/red/CorrugatedMetalPanel01_1K_Roughness.png';
-import pieceRedHeight from './piece/red/CorrugatedMetalPanel01_1K_Height.png';
+import pieceRedBaseColor from './piece/red/RedLeather02_1K_BaseColor.png';
+import pieceRedNormal from './piece/red/RedLeather02_1K_Normal.png';
+import pieceRedRoughness from './piece/red/RedLeather02_1K_NormRough.png';
+import pieceRedHeight from './piece/red/RedLeather02_1K_NormHeight.png';
 
-import pieceBlackBaseColor from './piece/black/BrushedIron02_1K_BaseColor.png';
-import pieceBlackNormal from './piece/black/BrushedIron02_1K_Normal.png';
-import pieceBlackRoughness from './piece/black/BrushedIron02_1K_Roughness.png';
-import pieceBlackHeight from './piece/black/BrushedIron02_1K_Height.png';
-import pieceBlackMetallic from './piece/black/BrushedIron02_1K_Metallic.png';
+import pieceBlackBaseColor from './piece/black/BlackLeather02_1K_BaseColor.png';
+import pieceBlackNormal from './piece/black/BlackLeather02_1K_Normal.png';
+import pieceBlackRoughness from './piece/black/BlackLeather02_1K_Roughness.png';
+import pieceBlackHeight from './piece/black/BlackLeather02_1K_Height.png';
 
 export const MODERN_PBR_TEXTURES = {
   board: {
@@ -35,6 +34,5 @@ export const MODERN_PBR_TEXTURES = {
     normal: pieceBlackNormal,
     roughness: pieceBlackRoughness,
     height: pieceBlackHeight,
-    metallic: pieceBlackMetallic
   }
 };

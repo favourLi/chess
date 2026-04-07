@@ -99,6 +99,7 @@ export class GameScene {
     const anim = getAnimPreset(cfg.animStyle);
     this.animPreset = anim;
     this.animStyleId = cfg.animStyle;
+    this.skinStyleId = cfg.skin;
 
     if (this.board) this.board.applySkinPreset(skin);
     if (this.pieces) this.pieces.applySkinPreset(skin);
@@ -122,12 +123,16 @@ export class GameScene {
       .then((equirectTex) => {
         if (envGen !== this._envApplyGeneration) return;
         this._applyEnvironmentFromEquirectangular(equirectTex);
+        // 若环境贴图已成功应用，则先不使用额外灯光，便于观察 IBL 效果
+        this._setExtraLightsEnabled(false);
       })
       .catch((err) => {
         if (envGen !== this._envApplyGeneration) return;
         console.warn('[GameScene] EXR 环境未加载:', err?.message || err);
         this._disposeSceneEnvironment();
         this._applyRoomEnvironmentFallback();
+        // EXR 加载失败时仍保留传统灯光，避免画面过暗
+        this._setExtraLightsEnabled(true);
       });
 
     this.scene.background = new THREE.Color(skin.scene.background);
@@ -137,18 +142,12 @@ export class GameScene {
       this.scene.fog.far = skin.scene.fogFar;
     }
 
+    // 先保留颜色等配置，但额外灯光是否启用由 _setExtraLightsEnabled 控制
     const L = skin.lighting;
-    if (this.lights?.ambient) {
-      this.lights.ambient.color.setHex(L.ambient.color);
-      this.lights.ambient.intensity = L.ambient.intensity;
-    }
-    if (this.lights?.directional) {
-      this.lights.directional.color.setHex(L.directional.color);
-      this.lights.directional.intensity = L.directional.intensity;
-    }
-    if (this.lights?.point) {
-      this.lights.point.color.setHex(L.point.color);
-      this.lights.point.intensity = L.point.intensity;
+    if (this.lights?.ambient) this.lights.ambient.color.setHex(L.ambient.color);
+    if (this.lights?.directional) this.lights.directional.color.setHex(L.directional.color);
+    if (this.lights?.point) this.lights.point.color.setHex(L.point.color);
+    if (this.lights?.point && typeof L.point.distance === 'number') {
       this.lights.point.distance = L.point.distance;
     }
 
@@ -157,6 +156,25 @@ export class GameScene {
       detachSelectionVisual(this.selectedPiece);
       this.pieces.deselectAll();
       this.selectedPiece = null;
+    }
+  }
+
+  /**
+   * 额外灯光开关（用于对比环境贴图 IBL 效果）。
+   * @param {boolean} enabled
+   */
+  _setExtraLightsEnabled(enabled) {
+    const skin = getSkinPreset(this.skinStyleId || STYLE_KEYS.CLASSICAL);
+    const L = skin?.lighting;
+    if (!L) return;
+    if (this.lights?.ambient) {
+      this.lights.ambient.intensity = enabled ? L.ambient.intensity : 0;
+    }
+    if (this.lights?.directional) {
+      this.lights.directional.intensity = enabled ? L.directional.intensity : 0;
+    }
+    if (this.lights?.point) {
+      this.lights.point.intensity = enabled ? L.point.intensity : 0;
     }
   }
 
