@@ -210,6 +210,15 @@ app.get('/api/game/watchable', authMiddleware, (req, res) => {
   res.json({ status: 'none', gameId: null });
 });
 
+const distDir = path.join(__dirname, '..', 'dist');
+const distIndex = path.join(distDir, 'index.html');
+const shouldServeDist =
+  fs.existsSync(distIndex) &&
+  (process.env.NODE_ENV === 'production' || process.env.SERVE_DIST === '1');
+if (shouldServeDist) {
+  app.use(express.static(distDir));
+}
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: true, credentials: true }

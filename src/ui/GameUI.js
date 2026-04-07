@@ -59,55 +59,85 @@ export class GameUI {
     root.className = 'game-ui-overlay';
     root.innerHTML = `
       <div class="game-ui-main-menu" id="game-ui-main-menu">
-        <h1 class="game-ui-title">3D 象棋</h1>
-        <div class="game-ui-style-panel" id="game-ui-style-panel">
-          <div class="game-ui-style-row">
-            <label for="game-ui-skin">皮肤风格</label>
-            <select id="game-ui-skin" class="game-ui-select" aria-label="皮肤风格">${skinOptionsHtml()}</select>
-          </div>
-          <div class="game-ui-style-row">
-            <label for="game-ui-anim">游戏风格</label>
-            <select id="game-ui-anim" class="game-ui-select" aria-label="游戏风格">${animOptionsHtml()}</select>
-          </div>
-          <p class="game-ui-style-note" id="game-ui-style-note" hidden>对局进行中，风格已锁定</p>
+        <div class="game-ui-home-bg" aria-hidden="true"></div>
+        <div class="game-ui-home-inner game-ui-home-inner--minimal">
+          <header class="game-ui-home-hero">
+            <span class="game-ui-home-badge">WebGL · 在线联机</span>
+            <h1 class="game-ui-title">3D 象棋</h1>
+            <p class="game-ui-subtitle">本地同桌或联机对弈</p>
+          </header>
+          <p class="game-ui-home-auth-line" id="game-ui-home-auth-line" aria-live="polite"></p>
+          <nav class="game-ui-home-nav" aria-label="主菜单">
+            <button type="button" class="game-ui-btn game-ui-btn--primary" data-ui="start">本地双人对弈</button>
+            <button type="button" class="game-ui-btn" data-ui="open-online-modal">联机大厅</button>
+            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="open-style-modal">棋盘与动画</button>
+            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="help">走子帮助</button>
+          </nav>
+          <p class="game-ui-menu-hint" id="game-ui-menu-hint" aria-live="polite"></p>
         </div>
-        <div class="game-ui-online" id="game-ui-online">
-          <h2 class="game-ui-online-title">联机对战</h2>
-          <p class="game-ui-online-note">需先运行后端 <code>npm run server:dev</code>（端口 3030），前端可用 <code>npm run dev:full</code> 同时启前后端。</p>
-          <div class="game-ui-online-row">
-            <input id="game-ui-username" class="game-ui-input" placeholder="用户名" autocomplete="username" />
-            <input id="game-ui-password" class="game-ui-input" type="password" placeholder="密码" autocomplete="current-password" />
+      </div>
+
+      <div class="game-ui-modal" id="game-ui-modal-style" hidden role="dialog" aria-modal="true" aria-labelledby="game-ui-modal-style-title">
+        <div class="game-ui-modal-backdrop" data-modal-close="style" tabindex="-1" aria-hidden="true"></div>
+        <div class="game-ui-modal-panel">
+          <div class="game-ui-modal-header">
+            <h2 id="game-ui-modal-style-title" class="game-ui-modal-title">棋盘与动画</h2>
+            <button type="button" class="game-ui-modal-x" data-modal-close="style" aria-label="关闭">×</button>
           </div>
-          <div class="game-ui-online-actions">
-            <button type="button" class="game-ui-btn game-ui-btn--small" data-ui="register">注册</button>
-            <button type="button" class="game-ui-btn game-ui-btn--small" data-ui="login">登录</button>
-            <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--small" data-ui="logout">退出登录</button>
+          <p class="game-ui-modal-lead">开局前可更换皮肤与走子动画；对局开始后直至本局结束前锁定。</p>
+          <div class="game-ui-style-panel game-ui-style-panel--modal" id="game-ui-style-panel">
+            <div class="game-ui-style-row">
+              <label for="game-ui-skin">皮肤风格</label>
+              <select id="game-ui-skin" class="game-ui-select" aria-label="皮肤风格">${skinOptionsHtml()}</select>
+            </div>
+            <div class="game-ui-style-row">
+              <label for="game-ui-anim">游戏风格</label>
+              <select id="game-ui-anim" class="game-ui-select" aria-label="游戏风格">${animOptionsHtml()}</select>
+            </div>
+            <p class="game-ui-style-note" id="game-ui-style-note" hidden>对局进行中，风格已锁定</p>
           </div>
-          <p class="game-ui-online-user" id="game-ui-online-user"></p>
-          <div class="game-ui-online-actions">
-            <button type="button" class="game-ui-btn" data-ui="match" disabled>快速匹配</button>
-            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="create-room" disabled>创建房间</button>
-          </div>
-          <div class="game-ui-online-row">
-            <input id="game-ui-room-code" class="game-ui-input" placeholder="房间码 6 位" maxlength="6" />
-            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="join-room-submit" disabled>加入房间</button>
-          </div>
-          <div class="game-ui-online-row">
-            <input id="game-ui-watch-code" class="game-ui-input" placeholder="观战：房间码或完整对局 ID" spellcheck="false" />
-            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="watch-submit" disabled>观战</button>
-          </div>
-          <div class="game-ui-online-actions">
-            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="replays-open" disabled>我的回放</button>
-          </div>
-          <p class="game-ui-menu-hint game-ui-online-hint" id="game-ui-online-hint" aria-live="polite"></p>
+          <button type="button" class="game-ui-btn game-ui-btn--primary game-ui-modal-footer-btn" data-modal-close="style">完成</button>
         </div>
-        <div class="game-ui-menu-actions">
-          <button type="button" class="game-ui-btn" data-ui="start">本地双人对弈</button>
-          <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="settings">设置</button>
-          <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="help">帮助</button>
+      </div>
+
+      <div class="game-ui-modal" id="game-ui-modal-online" hidden role="dialog" aria-modal="true" aria-labelledby="game-ui-modal-online-title">
+        <div class="game-ui-modal-backdrop" data-modal-close="online" tabindex="-1" aria-hidden="true"></div>
+        <div class="game-ui-modal-panel game-ui-modal-panel--wide">
+          <div class="game-ui-modal-header">
+            <h2 id="game-ui-modal-online-title" class="game-ui-modal-title">联机大厅</h2>
+            <button type="button" class="game-ui-modal-x" data-modal-close="online" aria-label="关闭">×</button>
+          </div>
+          <div class="game-ui-online" id="game-ui-online">
+            <p class="game-ui-online-note">需先运行后端 <code>npm run server:dev</code>（端口 3030），前端可用 <code>npm run dev:full</code> 同时启前后端。</p>
+            <div class="game-ui-online-row">
+              <input id="game-ui-username" class="game-ui-input" placeholder="用户名" autocomplete="username" />
+              <input id="game-ui-password" class="game-ui-input" type="password" placeholder="密码" autocomplete="current-password" />
+            </div>
+            <div class="game-ui-online-actions">
+              <button type="button" class="game-ui-btn game-ui-btn--small" data-ui="register">注册</button>
+              <button type="button" class="game-ui-btn game-ui-btn--small" data-ui="login">登录</button>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--small" data-ui="logout">退出登录</button>
+            </div>
+            <p class="game-ui-online-user" id="game-ui-online-user"></p>
+            <div class="game-ui-online-actions">
+              <button type="button" class="game-ui-btn" data-ui="match" disabled>快速匹配</button>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="create-room" disabled>创建房间</button>
+            </div>
+            <div class="game-ui-online-row">
+              <input id="game-ui-room-code" class="game-ui-input" placeholder="房间码 6 位" maxlength="6" />
+              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="join-room-submit" disabled>加入房间</button>
+            </div>
+            <div class="game-ui-online-row">
+              <input id="game-ui-watch-code" class="game-ui-input" placeholder="观战：房间码或完整对局 ID" spellcheck="false" />
+              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="watch-submit" disabled>观战</button>
+            </div>
+            <div class="game-ui-online-actions">
+              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="replays-open" disabled>我的回放</button>
+            </div>
+            <p class="game-ui-menu-hint game-ui-online-hint" id="game-ui-online-hint" aria-live="polite"></p>
+          </div>
+          <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-modal-footer-btn" data-modal-close="online">关闭</button>
         </div>
-        <p class="game-ui-subtitle">本地模式：开局前可切换皮肤；联机模式：登录后匹配或房间</p>
-        <p class="game-ui-menu-hint" id="game-ui-menu-hint" aria-live="polite"></p>
       </div>
       <div class="game-ui-hud" id="game-ui-hud" hidden>
         <div class="game-ui-hud-stats">
@@ -128,7 +158,7 @@ export class GameUI {
             <code id="game-ui-hud-share-room" class="game-ui-hud-share-code"></code>
             <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="copy-room-code">复制</button>
           </div>
-          <p class="game-ui-hud-share-tip">好友登录后，在首页「观战」粘贴对局 ID 或房间码（无需回首页即可复制）</p>
+          <p class="game-ui-hud-share-tip">好友登录后，在「联机大厅」→ 观战中粘贴对局 ID 或房间码（局内也可复制）</p>
         </div>
         <div class="game-ui-hud-online" id="game-ui-hud-online" hidden>
           <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="surrender">认输</button>
@@ -164,6 +194,9 @@ export class GameUI {
 
     this._els.root = root;
     this._els.mainMenu = root.querySelector('#game-ui-main-menu');
+    this._els.modalStyle = root.querySelector('#game-ui-modal-style');
+    this._els.modalOnline = root.querySelector('#game-ui-modal-online');
+    this._els.homeAuthLine = root.querySelector('#game-ui-home-auth-line');
     this._els.menuHint = root.querySelector('#game-ui-menu-hint');
     this._els.hud = root.querySelector('#game-ui-hud');
     this._els.hudPlayer = root.querySelector('#game-ui-hud-player');
@@ -310,6 +343,7 @@ export class GameUI {
     this._shareRoomCode = '';
     this._syncShareHud();
     this._setStyleControlsLocked(false);
+    this._closeModals();
     this._els.mainMenu.hidden = false;
     this._els.hud.hidden = true;
     this._els.hudHint.textContent = '操作：先点己方棋子，再点目标格或对方子';
@@ -364,6 +398,35 @@ export class GameUI {
     this._els.btnJoinRoom.disabled = !logged;
     this._els.btnWatch.disabled = !logged;
     this._els.btnReplays.disabled = !logged;
+    if (this._els.homeAuthLine) {
+      if (!logged) {
+        this._els.homeAuthLine.textContent = '未登录 · 打开「联机大厅」注册或登录';
+      } else {
+        const u = this._els.onlineUser?.textContent?.trim();
+        this._els.homeAuthLine.textContent = u || '已登录';
+      }
+    }
+  }
+
+  _closeModal(which) {
+    if (which === 'style' && this._els.modalStyle) this._els.modalStyle.hidden = true;
+    if (which === 'online' && this._els.modalOnline) this._els.modalOnline.hidden = true;
+  }
+
+  _closeModals() {
+    this._closeModal('style');
+    this._closeModal('online');
+  }
+
+  /** @param {'style' | 'online'} which */
+  _openModal(which) {
+    if (which === 'style') {
+      if (this._els.modalOnline) this._els.modalOnline.hidden = true;
+      if (this._els.modalStyle) this._els.modalStyle.hidden = false;
+    } else if (which === 'online') {
+      if (this._els.modalStyle) this._els.modalStyle.hidden = true;
+      if (this._els.modalOnline) this._els.modalOnline.hidden = false;
+    }
   }
 
   async _api(path, options = {}) {
@@ -667,6 +730,11 @@ export class GameUI {
     });
 
     this._els.root.addEventListener('click', (e) => {
+      const closer = e.target.closest('[data-modal-close]');
+      if (closer) {
+        this._closeModal(closer.getAttribute('data-modal-close'));
+        return;
+      }
       const rp = e.target.closest('[data-replay-id]');
       if (rp) {
         this._loadReplayById(rp.getAttribute('data-replay-id'));
@@ -677,8 +745,9 @@ export class GameUI {
       const id = btn.getAttribute('data-ui');
       const map = {
         start: () => this.startGame(),
-        settings: () => this.openSettings(),
         help: () => this.openHelp(),
+        'open-style-modal': () => this._openModal('style'),
+        'open-online-modal': () => this._openModal('online'),
         undo: () => this.undoMove(),
         restart: () => this.restartGame(),
         home: () => this.goHome(),
@@ -761,6 +830,18 @@ export class GameUI {
       };
       map[id]?.();
     });
+
+    this._onDocKeydown = (e) => {
+      if (e.key !== 'Escape') return;
+      if (this._els.modalStyle && !this._els.modalStyle.hidden) {
+        this._closeModal('style');
+        return;
+      }
+      if (this._els.modalOnline && !this._els.modalOnline.hidden) {
+        this._closeModal('online');
+      }
+    };
+    document.addEventListener('keydown', this._onDocKeydown);
   }
 
   openMainMenuFromGame() {
@@ -768,6 +849,7 @@ export class GameUI {
       this._exitReplayUi();
       return;
     }
+    this._closeModals();
     this._els.mainMenu.hidden = false;
     this._els.hud.hidden = true;
   }
@@ -792,6 +874,7 @@ export class GameUI {
       this._online.disconnect();
       if (scene?.resetGame) scene.resetGame();
       this._setStyleControlsLocked(false);
+      this._closeModals();
       this._els.mainMenu.hidden = false;
       this._els.hud.hidden = true;
       this._els.hudHint.textContent = '操作：先点己方棋子，再点目标格或对方子';
@@ -813,6 +896,7 @@ export class GameUI {
     const cfg = this._readStyleConfig();
     this.applyStyleConfig?.(cfg);
     this._setStyleControlsLocked(true);
+    this._closeModals();
 
     this._els.mainMenu.hidden = true;
     this._els.hud.hidden = false;
@@ -824,8 +908,9 @@ export class GameUI {
   }
 
   openSettings() {
+    this._openModal('style');
     this._els.menuHint.textContent =
-      '外观：使用上方「皮肤风格」「游戏风格」；对局开始后不可更改';
+      '在弹窗中选择「皮肤风格」「游戏风格」；对局开始后不可更改';
   }
 
   openHelp() {

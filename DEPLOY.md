@@ -2,14 +2,19 @@
 
 面向本仓库 **Node + Express + Socket.IO** 后端与 **webpack 构建** 的前端静态资源。与 `phase_2.md` 非功能需求（HTTPS、密钥、数据）对齐。
 
+**第一次把项目部署到自己的 Linux 服务器**：请直接看 **[服务器部署指南.md](./服务器部署指南.md)**（分步命令、Nginx、HTTPS、PM2）。
+
 ## 1. 环境变量
 
-| 变量 | 必填 | 说明 |
-|------|------|------|
-| `PORT` | 否 | HTTP 端口，默认 `3030` |
-| `JWT_ACCESS_SECRET` | **生产必填** | 签发 Access Token；勿与 Refresh 相同 |
-| `JWT_REFRESH_SECRET` | **生产必填** | 签发 Refresh Token |
-| `CORS_ORIGIN` | 否 | 允许的前端源，多个用英文逗号分隔；不设则保持当前「反射 Origin」的宽松行为 |
+
+| 变量                   | 必填       | 说明                                                             |
+| -------------------- | -------- | -------------------------------------------------------------- |
+| `PORT`               | 否        | HTTP 端口，默认 `3030`                                              |
+| `JWT_ACCESS_SECRET`  | **生产必填** | 签发 Access Token；勿与 Refresh 相同                                  |
+| `JWT_REFRESH_SECRET` | **生产必填** | 签发 Refresh Token                                               |
+| `CORS_ORIGIN`        | 否        | 允许的前端源，多个用英文逗号分隔；不设则保持当前「反射 Origin」的宽松行为                       |
+| `SERVE_DIST`         | 否        | 设为 `1` 时，即使非 production 也会在存在 `dist/` 时由 Node 托管静态资源（本地验收生产包用） |
+
 
 生成密钥示例（任选其一，长度建议 ≥ 32 字节）：
 
@@ -17,7 +22,7 @@
 openssl rand -base64 48
 ```
 
-本地可参考根目录 **`.env.example`**，复制为 `.env` 并填入（`.env` 已加入 `.gitignore`）。
+本地可参考根目录 `**.env.example**`，复制为 `.env` 并填入（`.env` 已加入 `.gitignore`）。
 
 **注意**：当前 `server/index.js` **不会自动读取 `.env` 文件**。请使用下列方式之一注入环境变量：
 
@@ -55,14 +60,30 @@ npm ci
 npm run build
 ```
 
-产物在 `dist/`。由 Nginx `root` 指向 `dist`，并将 **`/api` 与 `/socket.io`** 反代到 Node（与开发时 webpack `proxy` 行为一致）。若静态站点与 API 不同源，需配置 `CORS_ORIGIN` 并确保 JWT、Cookie（若未来使用）的域策略正确。
+产物在 `dist/`。
+
+- **一体部署（推荐）**：若存在 `dist/index.html` 且 `**NODE_ENV=production`**（或显式 `**SERVE_DIST=1`**），`server/index.js` 会用 `express.static` 托管 `dist/`，与 `/api`、`/socket.io` 同域。适合 [Render](https://render.com)、[Railway](https://railway.app)、[Fly.io](https://fly.io) 等：构建阶段跑 `npm run build`，启动命令 `npm start`，并配置环境变量与持久盘挂载 `data/`（若平台支持）。
+- **分体部署**：由 Nginx 的 `root` 指向 `dist`，仅将 `**/api` 与 `/socket.io`** 反代到 Node（与开发时 webpack `proxy` 一致）。若静态站点与 API 不同源，需配置 `CORS_ORIGIN`，且前端要把请求改到后端域名（当前代码为相对路径 `/api`，仅同域可用）。
+
+## 3.1 与 GitHub 的关系
+
+
+| 方式               | 能否跑联机后端 | 说明                                                                                                                                  |
+| ---------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **GitHub 仓库**    | 是（间接）   | 代码托管在 GitHub；用 **Render / Railway / Fly.io** 等「连接 GitHub 仓库」做自动构建与部署，即可在公网跑完整应用（含 WebSocket）。本仓库已提供 **GitHub Actions CI**（测试 + 构建）。 |
+| **GitHub Pages** | **否**   | Pages 只提供**静态文件**，**不能**运行 Node 与 Socket.IO。若只用 Pages 托管前端，必须把 API 部署到别的域名，并在构建时注入后端地址（当前未内置该开关，需改 webpack / 客户端）。                  |
+
+
+结论：**不能**指望「只开 GitHub Pages」就完成本项目的联机；可以 **代码在 GitHub + 外部 PaaS 从 GitHub 拉取并运行 Node**，这与「在 GitHub 上完成发布流程」是常见搭配。
 
 ## 4. `data` 目录与备份
 
-| 路径 | 内容 |
-|------|------|
-| `data/db.json` | 用户、好友、刷新令牌等（已在 `.gitignore`） |
-| `data/replays/*.json` | 对局回放（默认忽略，勿将用户数据提交仓库） |
+
+| 路径                    | 内容                           |
+| --------------------- | ---------------------------- |
+| `data/db.json`        | 用户、好友、刷新令牌等（已在 `.gitignore`） |
+| `data/replays/*.json` | 对局回放（默认忽略，勿将用户数据提交仓库）        |
+
 
 **备份建议**：
 
@@ -80,11 +101,11 @@ NODE_ENV=production node server/index.js
 
 ## 6. 上线前检查清单
 
-- [ ] `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET` 已替换且足够随机  
-- [ ] 生产环境不再使用代码内默认密钥字符串  
-- [ ] HTTPS 已启用，反代 WebSocket 正常（双端联机 smoke test）  
-- [ ] （可选）`CORS_ORIGIN` 收紧为实际前端域名  
-- [ ] `data/` 备份策略已落实  
-- [ ] 防火墙仅暴露 443（及 80 跳转），Node 端口仅本机回环  
+- `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET` 已替换且足够随机  
+- 生产环境不再使用代码内默认密钥字符串  
+- HTTPS 已启用，反代 WebSocket 正常（双端联机 smoke test）  
+- （可选）`CORS_ORIGIN` 收紧为实际前端域名  
+- `data/` 备份策略已落实  
+- 防火墙仅暴露 443（及 80 跳转），Node 端口仅本机回环
 
-更细的产品与阶段划分见 **`PHASE2_STATUS.md`**、**`phase_2.md`**。
+更细的产品与阶段划分见 `**PHASE2_STATUS.md`**、`**phase_2.md`**。

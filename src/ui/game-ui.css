@@ -1,23 +1,23 @@
 /* 全屏穿透：仅菜单/HUD 自身接收点击，其余区域点到下方 canvas */
+/* 字体：Google Fonts（index.html）Noto Sans SC + 标题 ZCOOL XiaoWei，参考现代卡片式 UI */
 .game-ui-overlay {
   position: fixed;
   inset: 0;
   z-index: 20;
   pointer-events: none;
-  font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', SimHei, sans-serif;
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', SimHei, sans-serif;
+  font-feature-settings: 'kern' 1;
+  -webkit-font-smoothing: antialiased;
 }
 
 .game-ui-main-menu {
   pointer-events: auto;
   position: absolute;
   inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: rgba(44, 62, 80, 0.94);
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
 }
 
@@ -25,14 +25,206 @@
   display: none !important;
 }
 
+/* 首页氛围背景（棋盘意象：深底 + 金红微光） */
+.game-ui-home-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 70% at 50% -15%, rgba(201, 162, 39, 0.14), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 110% 40%, rgba(139, 21, 56, 0.1), transparent 50%),
+    radial-gradient(ellipse 50% 40% at -10% 60%, rgba(45, 106, 111, 0.08), transparent 45%),
+    linear-gradient(168deg, #0c0f14 0%, #151a22 38%, #0a0e12 100%);
+}
+
+.game-ui-home-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.game-ui-home-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 2.25rem) clamp(1rem, 3vw, 1.5rem) 2rem;
+  box-sizing: border-box;
+}
+
+.game-ui-home-inner--minimal {
+  gap: 1rem;
+  padding: clamp(1.5rem, 5vh, 2.5rem) 1rem 1.5rem;
+  min-height: min(100%, 100vh);
+  justify-content: center;
+}
+
+.game-ui-home-auth-line {
+  margin: -0.25rem 0 0;
+  font-size: 0.82rem;
+  color: rgba(129, 184, 170, 0.95);
+  text-align: center;
+  max-width: 22rem;
+  line-height: 1.4;
+  min-height: 1.35rem;
+}
+
+.game-ui-home-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.55rem;
+  width: min(19rem, 100%);
+  margin-top: 0.35rem;
+}
+
+.game-ui-home-nav .game-ui-btn {
+  width: 100%;
+}
+
+.game-ui-home-hero {
+  text-align: center;
+  max-width: 36rem;
+}
+
+.game-ui-home-badge {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(232, 220, 180, 0.95);
+  background: rgba(201, 162, 39, 0.12);
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  border-radius: 999px;
+}
+
+/* 弹窗：棋盘主题 / 联机大厅 */
+.game-ui-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.game-ui-modal:not([hidden]) {
+  pointer-events: auto;
+}
+
+.game-ui-modal[hidden] {
+  display: none !important;
+}
+
+.game-ui-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 8, 12, 0.62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.game-ui-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(24rem, 100%);
+  max-height: min(90vh, 44rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.1rem 1.2rem 1.2rem;
+  border-radius: 16px;
+  background: linear-gradient(165deg, rgba(34, 42, 54, 0.98) 0%, rgba(18, 22, 30, 0.99) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(201, 162, 39, 0.06) inset;
+  box-sizing: border-box;
+}
+
+.game-ui-modal-panel--wide {
+  width: min(28rem, 100%);
+}
+
+.game-ui-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.game-ui-modal-title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #f5f0e6;
+  letter-spacing: 0.06em;
+}
+
+.game-ui-modal-x {
+  flex: 0 0 auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: -0.2rem -0.35rem 0 0;
+  padding: 0;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: rgba(236, 240, 241, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.game-ui-modal-x:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.game-ui-modal-lead {
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(174, 182, 188, 0.98);
+}
+
+.game-ui-modal-footer-btn {
+  margin-top: 0.85rem;
+  width: 100%;
+}
+
+.game-ui-style-panel--modal {
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+}
+
 .game-ui-style-panel {
   pointer-events: auto;
-  width: min(22rem, 92vw);
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.25rem;
-  background: rgba(0, 0, 0, 0.22);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
   box-sizing: border-box;
 }
 
@@ -61,12 +253,13 @@
 .game-ui-select {
   flex: 1;
   min-width: 0;
-  padding: 0.45rem 0.6rem;
-  font-size: 0.95rem;
-  color: #2c3e50;
-  background: #ecf0f1;
-  border: none;
-  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.92rem;
+  font-family: inherit;
+  color: #f0f3f5;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -83,58 +276,85 @@
 }
 
 .game-ui-title {
-  margin: 0 0 0.5rem;
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.06em;
-}
-
-.game-ui-menu-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  width: min(20rem, 88vw);
+  margin: 0;
+  font-family: 'ZCOOL XiaoWei', 'Noto Sans SC', serif;
+  font-size: clamp(2.25rem, 7vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #f4e4c1 0%, #e8c547 45%, #c9a227 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 12px rgba(201, 162, 39, 0.25));
 }
 
 .game-ui-btn {
   display: block;
   width: 100%;
   padding: 0.85rem 1rem;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
+  font-family: inherit;
   font-weight: 600;
   color: #fff;
-  background: #3498db;
-  border: none;
-  border-radius: 8px;
+  background: linear-gradient(180deg, #3d8fd4 0%, #2c78b8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease;
+  box-shadow: 0 4px 14px rgba(44, 120, 184, 0.35);
+  transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
 }
 
 .game-ui-btn:hover {
-  background: #2980b9;
+  background: linear-gradient(180deg, #4a9ae0 0%, #3586ca 100%);
+  box-shadow: 0 6px 20px rgba(44, 120, 184, 0.42);
 }
 
 .game-ui-btn:active {
   transform: scale(0.98);
 }
 
+.game-ui-btn:focus-visible {
+  outline: 2px solid rgba(201, 162, 39, 0.85);
+  outline-offset: 2px;
+}
+
+.game-ui-btn--primary {
+  padding: 0.95rem 1.15rem;
+  font-size: 1.08rem;
+  background: linear-gradient(180deg, #d4a84b 0%, #a67c2a 55%, #8a6522 100%);
+  border-color: rgba(244, 228, 188, 0.25);
+  box-shadow: 0 6px 22px rgba(166, 124, 42, 0.45);
+}
+
+.game-ui-btn--primary:hover {
+  background: linear-gradient(180deg, #e0b55a 0%, #b88a32 55%, #967028 100%);
+  box-shadow: 0 8px 26px rgba(166, 124, 42, 0.5);
+}
+
 .game-ui-btn--ghost {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ecf0f1;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8eaed;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: none;
 }
 
 .game-ui-btn--ghost:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .game-ui-subtitle {
-  margin: 0.5rem 0 0;
+  margin: 0.35rem 0 0;
   font-size: 0.95rem;
-  color: #bdc3c7;
+  color: #c8cdd3;
   text-align: center;
-  max-width: 22rem;
-  line-height: 1.5;
+  max-width: 28rem;
+  line-height: 1.55;
+}
+
+.game-ui-home-hero .game-ui-subtitle {
+  margin-top: 0.65rem;
 }
 
 .game-ui-menu-hint {
@@ -292,18 +512,13 @@
 }
 
 .game-ui-online {
-  width: min(26rem, 94vw);
-  padding: 0.85rem 1rem;
-  background: rgba(0, 0, 0, 0.28);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
   box-sizing: border-box;
-}
-
-.game-ui-online-title {
-  margin: 0 0 0.35rem;
-  font-size: 1.05rem;
-  color: #dfe6e9;
 }
 
 .game-ui-online-note {
@@ -358,13 +573,6 @@
 .game-ui-online-hint {
   margin-top: 0.35rem !important;
   max-width: none !important;
-}
-
-.game-ui-online-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.35rem;
 }
 
 .game-ui-replay-overlay {

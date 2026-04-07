@@ -20,7 +20,7 @@
 | 联机动画      | `game:state.lastMove` → `GameScene` 复用 `animateMove` / `animateCapture`，再 `syncFromServer` 对齐；无 `lastMove` 或解析失败则直同步                          | 双开走子 / 吃子 / 将死最后一手                            |
 | 客户端单测     | `src/net/watchInput.js` + `watchInput.test.js`；`jest` 对 `src/**/*.test.js` 启用 `babel-jest`（与引擎单测同跑）                                           | `npm test`                                    |
 | 开发代理      | `webpack` `proxy`：`/api`、`/socket.io` → `localhost:3030`                                                                                      | `npm run dev:full`                            |
-| 生产部署说明    | `**DEPLOY.md`**：JWT / `CORS_ORIGIN`、HTTPS 反代与 WebSocket、`**data/**` 备份清单；`**.env.example**`；`.gitignore` 忽略 `.env`                            | 按文档核对上线前项                                     |
+| 生产部署说明    | `DEPLOY.md`：JWT / `CORS_ORIGIN` / `SERVE_DIST`、HTTPS、**`data/`** 备份、GitHub 与 Pages 说明；`.env.example`；`.github/workflows/ci.yml` | 按文档核对上线前项 |
 
 
 ## 最近修复（2026-04）
