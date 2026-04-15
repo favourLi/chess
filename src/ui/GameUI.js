@@ -116,6 +116,28 @@ export class GameUI {
         </div>
       </div>
 
+      <div class="game-ui-modal" id="game-ui-modal-auth" hidden role="dialog" aria-modal="true" aria-labelledby="game-ui-modal-auth-title">
+        <div class="game-ui-modal-backdrop" data-modal-close="auth" tabindex="-1" aria-hidden="true"></div>
+        <div class="game-ui-modal-panel">
+          <div class="game-ui-modal-header">
+            <h2 id="game-ui-modal-auth-title" class="game-ui-modal-title">登录 / 注册</h2>
+            <button type="button" class="game-ui-modal-x" data-modal-close="auth" aria-label="关闭">×</button>
+          </div>
+          <p class="game-ui-modal-lead">注册后可进行联机匹配、房间对战、观战与回放。</p>
+          <div class="game-ui-online-row">
+            <input id="game-ui-username" class="game-ui-input" placeholder="用户名" autocomplete="username" />
+            <input id="game-ui-password" class="game-ui-input" type="password" placeholder="密码" autocomplete="current-password" />
+          </div>
+          <div class="game-ui-online-actions">
+            <button type="button" class="game-ui-btn game-ui-btn--small" data-ui="register">注册</button>
+            <button type="button" class="game-ui-btn game-ui-btn--small" data-ui="login">登录</button>
+            <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--small" data-ui="logout">退出登录</button>
+          </div>
+          <p class="game-ui-menu-hint game-ui-online-hint" id="game-ui-auth-hint" aria-live="polite"></p>
+          <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-modal-footer-btn" data-modal-close="auth">关闭</button>
+        </div>
+      </div>
+
       <div class="game-ui-modal" id="game-ui-modal-style" hidden role="dialog" aria-modal="true" aria-labelledby="game-ui-modal-style-title">
         <div class="game-ui-modal-backdrop" data-modal-close="style" tabindex="-1" aria-hidden="true"></div>
         <div class="game-ui-modal-panel game-ui-modal-panel--deck">
@@ -230,17 +252,27 @@ export class GameUI {
           </div>
         </div>
         <p class="game-ui-hud-hint" id="game-ui-hud-hint">操作：先点己方棋子，再点目标格或对方子</p>
-        <div class="game-ui-hud-share" id="game-ui-hud-share" hidden>
-          <p class="game-ui-hud-share-title">邀请观战</p>
-          <div class="game-ui-hud-share-row">
-            <span class="game-ui-hud-share-label">对局 ID</span>
-            <code id="game-ui-hud-share-gameid" class="game-ui-hud-share-code"></code>
-            <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="copy-game-id">复制</button>
+      </div>
+
+      <div class="game-ui-modal" id="game-ui-modal-share" hidden role="dialog" aria-modal="true" aria-labelledby="game-ui-modal-share-title">
+        <div class="game-ui-modal-backdrop" data-modal-close="share" tabindex="-1" aria-hidden="true"></div>
+        <div class="game-ui-modal-panel">
+          <div class="game-ui-modal-header">
+            <h2 id="game-ui-modal-share-title" class="game-ui-modal-title">分享观战</h2>
+            <button type="button" class="game-ui-modal-x" data-modal-close="share" aria-label="关闭">×</button>
           </div>
-          <div class="game-ui-hud-share-row" id="game-ui-hud-share-room-wrap" hidden>
-            <span class="game-ui-hud-share-label">房间码</span>
-            <code id="game-ui-hud-share-room" class="game-ui-hud-share-code"></code>
-            <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="copy-room-code">复制</button>
+          <p class="game-ui-modal-lead">好友登录后，在「联机大厅」→ 观战中粘贴以下信息即可观战。</p>
+          <div class="game-ui-share-panel" id="game-ui-share-panel">
+            <div class="game-ui-hud-share-row">
+              <span class="game-ui-hud-share-label">对局 ID</span>
+              <code id="game-ui-hud-share-gameid" class="game-ui-hud-share-code"></code>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="copy-game-id">复制</button>
+            </div>
+            <div class="game-ui-hud-share-row" id="game-ui-hud-share-room-wrap" hidden>
+              <span class="game-ui-hud-share-label">房间码</span>
+              <code id="game-ui-hud-share-room" class="game-ui-hud-share-code"></code>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="copy-room-code">复制</button>
+            </div>
           </div>
           <p class="game-ui-hud-share-tip">好友登录后，在「联机大厅」→ 观战中粘贴对局 ID 或房间码（局内也可复制）</p>
         </div>
@@ -268,9 +300,13 @@ export class GameUI {
 
     this._els.root = root;
     this._els.mainMenu = root.querySelector('#game-ui-main-menu');
+    this._els.modalAuth = root.querySelector('#game-ui-modal-auth');
     this._els.modalStyle = root.querySelector('#game-ui-modal-style');
     this._els.modalOnline = root.querySelector('#game-ui-modal-online');
-    this._els.homeAuthLine = root.querySelector('#game-ui-home-auth-line');
+    this._els.modalShare = root.querySelector('#game-ui-modal-share');
+    this._els.homeUserName = root.querySelector('#game-ui-home-user-name');
+    this._els.homeLoginBtn = root.querySelector('#game-ui-home-login-btn');
+    this._els.homeLogoutBtn = root.querySelector('#game-ui-home-logout-btn');
     this._els.menuHint = root.querySelector('#game-ui-menu-hint');
     this._els.hud = root.querySelector('#game-ui-hud');
     this._els.hudPlayer = root.querySelector('#game-ui-hud-player');
@@ -295,8 +331,7 @@ export class GameUI {
     this._els.btnJoinRoom = root.querySelector('[data-ui="join-room-submit"]');
     this._els.watchCode = root.querySelector('#game-ui-watch-code');
     this._els.btnWatch = root.querySelector('[data-ui="watch-submit"]');
-    this._els.hudOnline = root.querySelector('#game-ui-hud-online');
-    this._els.hudShare = root.querySelector('#game-ui-hud-share');
+    this._els.hudShareBtn = root.querySelector('#game-ui-hud-share-open');
     this._els.hudShareGameId = root.querySelector('#game-ui-hud-share-gameid');
     this._els.hudShareRoomWrap = root.querySelector('#game-ui-hud-share-room-wrap');
     this._els.hudShareRoom = root.querySelector('#game-ui-hud-share-room');
@@ -511,20 +546,28 @@ export class GameUI {
   _closeModal(which) {
     if (which === 'style' && this._els.modalStyle) this._els.modalStyle.hidden = true;
     if (which === 'online' && this._els.modalOnline) this._els.modalOnline.hidden = true;
+    if (which === 'auth' && this._els.modalAuth) this._els.modalAuth.hidden = true;
+    if (which === 'share' && this._els.modalShare) this._els.modalShare.hidden = true;
   }
 
   _closeModals() {
     this._closeModal('style');
     this._closeModal('online');
+    this._closeModal('auth');
+    this._closeModal('share');
   }
 
-  /** @param {'style' | 'online'} which */
+  /** @param {'style' | 'online' | 'auth' | 'share'} which */
   _openModal(which) {
     if (which === 'style') {
       if (this._els.modalOnline) this._els.modalOnline.hidden = true;
+      if (this._els.modalAuth) this._els.modalAuth.hidden = true;
+      if (this._els.modalShare) this._els.modalShare.hidden = true;
       if (this._els.modalStyle) this._els.modalStyle.hidden = false;
     } else if (which === 'online') {
       if (this._els.modalStyle) this._els.modalStyle.hidden = true;
+      if (this._els.modalAuth) this._els.modalAuth.hidden = true;
+      if (this._els.modalShare) this._els.modalShare.hidden = true;
       if (this._els.modalOnline) this._els.modalOnline.hidden = false;
       requestAnimationFrame(() => this._focusOnlineModalEntry());
     }
@@ -570,7 +613,6 @@ export class GameUI {
       !!scene.myOnlineColor &&
       !scene.gameOver &&
       !this._els.hud.hidden;
-    if (this._els.hudOnline) this._els.hudOnline.hidden = !show;
     this._syncShareHud();
   }
 
@@ -583,9 +625,8 @@ export class GameUI {
       !!scene.myOnlineColor &&
       !scene.gameOver &&
       !this._els.hud.hidden;
-    const el = this._els.hudShare;
-    if (!el) return;
-    el.hidden = !show;
+    const btn = this._els.hudShareBtn;
+    if (btn) btn.hidden = !show;
     if (!show) return;
     this._els.hudShareGameId.textContent = this._shareGameId;
     const hasRoom = !!this._shareRoomCode;
@@ -626,6 +667,7 @@ export class GameUI {
       localStorage.removeItem(LS_REFRESH);
       this._els.onlineUser.textContent = '';
     }
+    this._updateOnlineAuthUi();
   }
 
   _connectSocketAndWire() {
@@ -723,6 +765,8 @@ export class GameUI {
       const cfg = this._readStyleConfig();
       this.applyStyleConfig?.(cfg);
       this._setStyleControlsLocked(true);
+      // 进入对局：自动关闭联机大厅弹窗
+      this._closeModal('online');
       this._els.mainMenu.hidden = true;
       this._els.hud.hidden = false;
       scene.beginOnlineMatch(enterAsPlayer ? payload.you : null, this._online);
@@ -783,7 +827,7 @@ export class GameUI {
         }
       });
     } catch (e) {
-      this._els.onlineHint.textContent = e.message || '注册失败';
+      if (this._els.authHint) this._els.authHint.textContent = e.message || '注册失败';
     }
   }
 
@@ -819,7 +863,7 @@ export class GameUI {
         }
       });
     } catch (e) {
-      this._els.onlineHint.textContent = e.message || '登录失败';
+      if (this._els.authHint) this._els.authHint.textContent = e.message || '登录失败';
     }
   }
 
@@ -889,6 +933,11 @@ export class GameUI {
         help: () => this.openHelp(),
         'open-style-modal': () => this._openModal('style'),
         'open-online-modal': () => this._openModal('online'),
+        'open-auth-modal': () => this._openModal('auth'),
+        'hud-share-open': () => {
+          this._syncShareHud();
+          this._openModal('share');
+        },
         undo: () => this.undoMove(),
         restart: () => this.restartGame(),
         home: () => this.goHome(),
@@ -927,14 +976,11 @@ export class GameUI {
             }
           });
         },
-        surrender: () => {
-          if (confirm('确定认输？对手将立即获胜。')) {
-            this._online.emitForfeit('surrender');
-          }
-        },
-        'leave-room': () => {
-          if (confirm('退出房间将判负，对手获胜。确定？')) {
+        forfeit: () => {
+          if (confirm('退出对局将判负，对手获胜。确定？')) {
             this._online.emitForfeit('leave');
+            // 立即回到首页：让用户有明确的“退出成功”反馈；同时给 socket 一个极短时间发出消息
+            setTimeout(() => this.goHome(), 50);
           }
         },
         'copy-game-id': () => this._copyToClipboard('对局 ID', this._shareGameId),
@@ -976,6 +1022,14 @@ export class GameUI {
       if (e.key !== 'Escape') return;
       if (this._els.modalStyle && !this._els.modalStyle.hidden) {
         this._closeModal('style');
+        return;
+      }
+      if (this._els.modalAuth && !this._els.modalAuth.hidden) {
+        this._closeModal('auth');
+        return;
+      }
+      if (this._els.modalShare && !this._els.modalShare.hidden) {
+        this._closeModal('share');
         return;
       }
       if (this._els.modalOnline && !this._els.modalOnline.hidden) {
