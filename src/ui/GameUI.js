@@ -100,7 +100,6 @@ export class GameUI {
               <div class="game-ui-home-panel-head">
                 <span class="game-ui-home-panel-kicker">就绪</span>
                 <h2 class="game-ui-home-panel-title">选择开局方式</h2>
-                <p class="game-ui-home-panel-lead">主操作集中在右侧指挥台，左侧为说明与账号状态。</p>
               </div>
               <nav class="game-ui-home-nav" aria-label="主菜单">
                 <button type="button" class="game-ui-btn game-ui-btn--primary" data-ui="start">本地双人对弈</button>
@@ -169,11 +168,6 @@ export class GameUI {
             <button type="button" class="game-ui-modal-x" data-modal-close="online" aria-label="关闭">×</button>
           </div>
           <div class="game-ui-online" id="game-ui-online">
-            <details class="game-ui-online-details">
-              <summary class="game-ui-online-details-sum">本地运行与连接说明</summary>
-              <p class="game-ui-online-note">需先运行后端 <code>npm run server:dev</code>（端口 3030），前端可用 <code>npm run dev:full</code> 同时启前后端。</p>
-            </details>
-
             <section class="game-ui-online-section" aria-labelledby="game-ui-online-heading-account">
               <h3 id="game-ui-online-heading-account" class="game-ui-online-section-title">账号</h3>
               <div id="game-ui-online-auth-guest" class="game-ui-online-auth-card">
