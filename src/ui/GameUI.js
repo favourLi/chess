@@ -60,26 +60,59 @@ export class GameUI {
     root.innerHTML = `
       <div class="game-ui-main-menu" id="game-ui-main-menu">
         <div class="game-ui-home-bg" aria-hidden="true"></div>
-        <div class="game-ui-home-inner game-ui-home-inner--minimal">
-          <div class="game-ui-home-topbar" aria-label="用户区">
-            <div class="game-ui-home-user" id="game-ui-home-user">
-              <span class="game-ui-home-user-name" id="game-ui-home-user-name">未登录</span>
-              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--tiny" data-ui="open-auth-modal" id="game-ui-home-login-btn">登录</button>
-              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--tiny" data-ui="logout" id="game-ui-home-logout-btn">退出</button>
+        <div class="game-ui-home-ambient" aria-hidden="true">
+          <span class="game-ui-home-orb game-ui-home-orb--a"></span>
+          <span class="game-ui-home-orb game-ui-home-orb--b"></span>
+          <span class="game-ui-home-orb game-ui-home-orb--c"></span>
+        </div>
+        <div class="game-ui-home-inner game-ui-home-inner--splash">
+          <div class="game-ui-home-grid">
+            <div class="game-ui-home-hero-col">
+              <header class="game-ui-home-hero">
+                <span class="game-ui-home-badge">WebGL · 在线联机</span>
+                <h1 class="game-ui-title">3D 象棋</h1>
+                <p class="game-ui-subtitle">本地同桌或联机对弈</p>
+                <p class="game-ui-home-tagline">沉浸式棋盘 · 走子动画 · 房间与观战</p>
+              </header>
+              <p class="game-ui-home-auth-line game-ui-home-auth-line--splash" id="game-ui-home-auth-line" aria-live="polite"></p>
+              <ul class="game-ui-home-features" aria-label="玩法亮点">
+                <li class="game-ui-home-feature">
+                  <span class="game-ui-home-feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M8 7h8M8 12h8M8 17h5"/><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                  </span>
+                  <span class="game-ui-home-feature-text"><strong>本机双控</strong>同一屏幕轮流走子</span>
+                </li>
+                <li class="game-ui-home-feature">
+                  <span class="game-ui-home-feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 20v-4M8 20v-2M16 20v-2"/><path d="M4 12a8 8 0 0 1 16 0"/><path d="M9 12h6"/></svg>
+                  </span>
+                  <span class="game-ui-home-feature-text"><strong>联机大厅</strong>匹配、房间与观战</span>
+                </li>
+                <li class="game-ui-home-feature">
+                  <span class="game-ui-home-feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+                  </span>
+                  <span class="game-ui-home-feature-text"><strong>多皮肤棋盘</strong>开局前可预览主题</span>
+                </li>
+              </ul>
             </div>
+            <aside class="game-ui-home-panel" aria-label="开始游戏">
+              <div class="game-ui-home-panel-head">
+                <span class="game-ui-home-panel-kicker">就绪</span>
+                <h2 class="game-ui-home-panel-title">选择开局方式</h2>
+                <p class="game-ui-home-panel-lead">主操作集中在右侧指挥台，左侧为说明与账号状态。</p>
+              </div>
+              <nav class="game-ui-home-nav" aria-label="主菜单">
+                <button type="button" class="game-ui-btn game-ui-btn--primary" data-ui="start">本地双人对弈</button>
+                <button type="button" class="game-ui-btn" data-ui="open-online-modal">联机大厅</button>
+                <div class="game-ui-home-nav-row">
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="open-style-modal">棋盘与动画</button>
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="help">走子帮助</button>
+                </div>
+              </nav>
+              <p class="game-ui-menu-hint game-ui-menu-hint--splash" id="game-ui-menu-hint" aria-live="polite"></p>
+            </aside>
           </div>
-          <header class="game-ui-home-hero">
-            <span class="game-ui-home-badge">WebGL · 在线联机</span>
-            <h1 class="game-ui-title">3D 象棋</h1>
-            <p class="game-ui-subtitle">本地同桌或联机对弈</p>
-          </header>
-          <nav class="game-ui-home-nav" aria-label="主菜单">
-            <button type="button" class="game-ui-btn game-ui-btn--primary" data-ui="start">本地双人对弈</button>
-            <button type="button" class="game-ui-btn" data-ui="open-online-modal">联机大厅</button>
-            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="open-style-modal">棋盘与动画</button>
-            <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="help">走子帮助</button>
-          </nav>
-          <p class="game-ui-menu-hint" id="game-ui-menu-hint" aria-live="polite"></p>
         </div>
       </div>
 
@@ -107,7 +140,7 @@ export class GameUI {
 
       <div class="game-ui-modal" id="game-ui-modal-style" hidden role="dialog" aria-modal="true" aria-labelledby="game-ui-modal-style-title">
         <div class="game-ui-modal-backdrop" data-modal-close="style" tabindex="-1" aria-hidden="true"></div>
-        <div class="game-ui-modal-panel">
+        <div class="game-ui-modal-panel game-ui-modal-panel--deck">
           <div class="game-ui-modal-header">
             <h2 id="game-ui-modal-style-title" class="game-ui-modal-title">棋盘与动画</h2>
             <button type="button" class="game-ui-modal-x" data-modal-close="style" aria-label="关闭">×</button>
@@ -130,49 +163,93 @@ export class GameUI {
 
       <div class="game-ui-modal" id="game-ui-modal-online" hidden role="dialog" aria-modal="true" aria-labelledby="game-ui-modal-online-title">
         <div class="game-ui-modal-backdrop" data-modal-close="online" tabindex="-1" aria-hidden="true"></div>
-        <div class="game-ui-modal-panel game-ui-modal-panel--wide">
+        <div class="game-ui-modal-panel game-ui-modal-panel--wide game-ui-modal-panel--deck">
           <div class="game-ui-modal-header">
             <h2 id="game-ui-modal-online-title" class="game-ui-modal-title">联机大厅</h2>
             <button type="button" class="game-ui-modal-x" data-modal-close="online" aria-label="关闭">×</button>
           </div>
           <div class="game-ui-online" id="game-ui-online">
-            <p class="game-ui-online-note">需先运行后端 <code>npm run server:dev</code>（端口 3030），前端可用 <code>npm run dev:full</code> 同时启前后端。</p>
-            <div class="game-ui-online-callout" id="game-ui-online-callout">
-              <span>未登录将无法联机操作。</span>
-              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--small" data-ui="open-auth-modal">去登录</button>
+            <details class="game-ui-online-details">
+              <summary class="game-ui-online-details-sum">本地运行与连接说明</summary>
+              <p class="game-ui-online-note">需先运行后端 <code>npm run server:dev</code>（端口 3030），前端可用 <code>npm run dev:full</code> 同时启前后端。</p>
+            </details>
+
+            <section class="game-ui-online-section" aria-labelledby="game-ui-online-heading-account">
+              <h3 id="game-ui-online-heading-account" class="game-ui-online-section-title">账号</h3>
+              <div id="game-ui-online-auth-guest" class="game-ui-online-auth-card">
+                <div class="game-ui-online-field">
+                  <label for="game-ui-username" class="game-ui-label">用户名</label>
+                  <input id="game-ui-username" class="game-ui-input" type="text" autocomplete="username" placeholder="用于登录" />
+                </div>
+                <div class="game-ui-online-field">
+                  <label for="game-ui-password" class="game-ui-label">密码</label>
+                  <input id="game-ui-password" class="game-ui-input" type="password" autocomplete="current-password" placeholder="登录密码" />
+                </div>
+                <div class="game-ui-online-actions game-ui-online-actions--auth">
+                  <button type="button" class="game-ui-btn game-ui-btn--primary game-ui-btn--small" data-ui="login">登录</button>
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--small" data-ui="register">注册新账号</button>
+                </div>
+              </div>
+              <div id="game-ui-online-auth-session" class="game-ui-online-session" hidden>
+                <div class="game-ui-online-session-row">
+                  <p class="game-ui-online-user" id="game-ui-online-user" role="status"></p>
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--small" data-ui="logout">退出登录</button>
+                </div>
+              </div>
+            </section>
+
+            <div id="game-ui-online-logged-block" class="game-ui-online-logged-block">
+              <section class="game-ui-online-section" aria-labelledby="game-ui-online-heading-play">
+                <h3 id="game-ui-online-heading-play" class="game-ui-online-section-title">对战</h3>
+                <p id="game-ui-online-gate-hint" class="game-ui-online-gate" role="note">请先登录后再使用匹配、房间与观战。</p>
+                <div class="game-ui-online-actions">
+                  <button type="button" class="game-ui-btn" data-ui="match" disabled>快速匹配</button>
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="create-room" disabled>创建房间</button>
+                </div>
+                <div class="game-ui-online-row game-ui-online-row--room">
+                  <label for="game-ui-room-code" class="game-ui-label game-ui-label--inline">房间码</label>
+                  <input id="game-ui-room-code" class="game-ui-input" placeholder="6 位" maxlength="6" inputmode="text" autocomplete="off" aria-label="房间码，6 位" />
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="join-room-submit" disabled>加入房间</button>
+                </div>
+              </section>
+
+              <section class="game-ui-online-section" aria-labelledby="game-ui-online-heading-watch">
+                <h3 id="game-ui-online-heading-watch" class="game-ui-online-section-title">观战与回放</h3>
+                <div class="game-ui-online-row game-ui-online-row--watch">
+                  <label for="game-ui-watch-code" class="game-ui-label game-ui-label--inline">观战</label>
+                  <input id="game-ui-watch-code" class="game-ui-input" placeholder="房间码或对局 ID" spellcheck="false" autocomplete="off" aria-label="观战用房间码或完整对局 ID" />
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="watch-submit" disabled>进入观战</button>
+                </div>
+                <div class="game-ui-online-actions">
+                  <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="replays-open" disabled>我的回放</button>
+                </div>
+              </section>
             </div>
-            <p class="game-ui-online-user" id="game-ui-online-user"></p>
-            <div class="game-ui-online-actions">
-              <button type="button" class="game-ui-btn" data-ui="match" disabled>快速匹配</button>
-              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="create-room" disabled>创建房间</button>
-            </div>
-            <div class="game-ui-online-row">
-              <input id="game-ui-room-code" class="game-ui-input" placeholder="房间码 6 位" maxlength="6" />
-              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="join-room-submit" disabled>加入房间</button>
-            </div>
-            <div class="game-ui-online-row">
-              <input id="game-ui-watch-code" class="game-ui-input" placeholder="观战：房间码或完整对局 ID" spellcheck="false" />
-              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="watch-submit" disabled>观战</button>
-            </div>
-            <div class="game-ui-online-actions">
-              <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="replays-open" disabled>我的回放</button>
-            </div>
+
             <p class="game-ui-menu-hint game-ui-online-hint" id="game-ui-online-hint" aria-live="polite"></p>
           </div>
           <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-modal-footer-btn" data-modal-close="online">关闭</button>
         </div>
       </div>
-      <div class="game-ui-hud" id="game-ui-hud" hidden>
-        <div class="game-ui-hud-bar">
-          <span id="game-ui-hud-status" class="game-ui-hud-status">对局中</span>
-          <span id="game-ui-hud-turn" class="game-ui-hud-turn">第 1 手</span>
-          <span id="game-ui-hud-player" class="game-ui-hud-player--red">当前行棋：红方</span>
-        </div>
-        <div class="game-ui-hud-actions">
-          <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="hud-share-open" id="game-ui-hud-share-open">分享</button>
-          <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="forfeit" id="game-ui-hud-forfeit">退出对局</button>
-          <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="undo">悔棋</button>
-          <button type="button" class="game-ui-btn game-ui-btn--inline" data-ui="home">回到首页</button>
+      <div class="game-ui-hud game-ui-hud--deck" id="game-ui-hud" hidden>
+        <div class="game-ui-hud-shell">
+          <div class="game-ui-hud-bar" aria-label="对局状态">
+            <span id="game-ui-hud-status" class="game-ui-hud-status">对局中</span>
+            <span id="game-ui-hud-turn" class="game-ui-hud-turn">第 1 手</span>
+            <span id="game-ui-hud-player" class="game-ui-hud-player--red">当前行棋：红方</span>
+          </div>
+          <div class="game-ui-hud-toolbar">
+            <div class="game-ui-hud-online" id="game-ui-hud-online" hidden>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="surrender">认输</button>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="leave-room">退出房间</button>
+            </div>
+            <div class="game-ui-hud-actions">
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="undo">悔棋</button>
+              <button type="button" class="game-ui-btn game-ui-btn--inline" data-ui="restart">重新开始</button>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="home">回到首页</button>
+              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="menu">菜单</button>
+            </div>
+          </div>
         </div>
         <p class="game-ui-hud-hint" id="game-ui-hud-hint">操作：先点己方棋子，再点目标格或对方子</p>
       </div>
@@ -197,17 +274,17 @@ export class GameUI {
               <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="copy-room-code">复制</button>
             </div>
           </div>
-          <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-modal-footer-btn" data-modal-close="share">关闭</button>
+          <p class="game-ui-hud-share-tip">好友登录后，在「联机大厅」→ 观战中粘贴对局 ID 或房间码（局内也可复制）</p>
         </div>
       </div>
       <div class="game-ui-replay-overlay" id="game-ui-replay-overlay" hidden>
-        <div class="game-ui-replay-panel">
+        <div class="game-ui-replay-panel game-ui-replay-panel--deck">
           <h3 class="game-ui-replay-panel-title">我的回放</h3>
           <ul class="game-ui-replay-ul" id="game-ui-replay-ul"></ul>
           <button type="button" class="game-ui-btn game-ui-btn--ghost" data-ui="replays-close">关闭</button>
         </div>
       </div>
-      <div class="game-ui-replay-bar" id="game-ui-replay-bar" hidden>
+      <div class="game-ui-replay-bar game-ui-replay-bar--deck" id="game-ui-replay-bar" hidden>
         <span id="game-ui-replay-step" class="game-ui-replay-step">步进 0 / 0</span>
         <input type="range" id="game-ui-replay-slider" class="game-ui-replay-slider" min="0" max="0" value="0" />
         <div class="game-ui-replay-bar-btns">
@@ -244,8 +321,10 @@ export class GameUI {
     this._els.password = root.querySelector('#game-ui-password');
     this._els.onlineUser = root.querySelector('#game-ui-online-user');
     this._els.onlineHint = root.querySelector('#game-ui-online-hint');
-    this._els.authHint = root.querySelector('#game-ui-auth-hint');
-    this._els.onlineCallout = root.querySelector('#game-ui-online-callout');
+    this._els.onlineAuthGuest = root.querySelector('#game-ui-online-auth-guest');
+    this._els.onlineAuthSession = root.querySelector('#game-ui-online-auth-session');
+    this._els.onlineLoggedBlock = root.querySelector('#game-ui-online-logged-block');
+    this._els.onlineGateHint = root.querySelector('#game-ui-online-gate-hint');
     this._els.roomCode = root.querySelector('#game-ui-room-code');
     this._els.btnMatch = root.querySelector('[data-ui="match"]');
     this._els.btnCreateRoom = root.querySelector('[data-ui="create-room"]');
@@ -432,12 +511,35 @@ export class GameUI {
     this._els.btnJoinRoom.disabled = !logged;
     this._els.btnWatch.disabled = !logged;
     this._els.btnReplays.disabled = !logged;
-    if (this._els.onlineCallout) this._els.onlineCallout.hidden = logged;
-    if (this._els.homeLoginBtn) this._els.homeLoginBtn.hidden = logged;
-    if (this._els.homeLogoutBtn) this._els.homeLogoutBtn.hidden = !logged;
-    if (this._els.homeUserName) {
-      if (!logged) this._els.homeUserName.textContent = '未登录';
-      else this._els.homeUserName.textContent = this._els.onlineUser?.textContent?.trim() || '已登录';
+    if (this._els.onlineAuthGuest) this._els.onlineAuthGuest.hidden = logged;
+    if (this._els.onlineAuthSession) this._els.onlineAuthSession.hidden = !logged;
+    if (this._els.onlineGateHint) this._els.onlineGateHint.hidden = logged;
+    if (this._els.onlineLoggedBlock) {
+      if (logged) this._els.onlineLoggedBlock.removeAttribute('inert');
+      else this._els.onlineLoggedBlock.setAttribute('inert', '');
+    }
+    if (this._els.homeAuthLine) {
+      if (!logged) {
+        this._els.homeAuthLine.textContent = '未登录 · 打开「联机大厅」注册或登录';
+      } else {
+        const u = this._els.onlineUser?.textContent?.trim();
+        this._els.homeAuthLine.textContent = u || '已登录';
+      }
+    }
+  }
+
+  /** 打开联机大厅后将焦点放到首个有意义控件（未登录 → 用户名，已登录 → 快速匹配） */
+  _focusOnlineModalEntry() {
+    if (!this._els.modalOnline || this._els.modalOnline.hidden) return;
+    const guest = this._els.onlineAuthGuest;
+    if (guest && !guest.hidden) {
+      this._els.username?.focus();
+      return;
+    }
+    try {
+      this._els.btnMatch?.focus();
+    } catch {
+      /* ignore */
     }
   }
 
@@ -467,16 +569,7 @@ export class GameUI {
       if (this._els.modalAuth) this._els.modalAuth.hidden = true;
       if (this._els.modalShare) this._els.modalShare.hidden = true;
       if (this._els.modalOnline) this._els.modalOnline.hidden = false;
-    } else if (which === 'auth') {
-      if (this._els.modalStyle) this._els.modalStyle.hidden = true;
-      if (this._els.modalOnline) this._els.modalOnline.hidden = true;
-      if (this._els.modalShare) this._els.modalShare.hidden = true;
-      if (this._els.modalAuth) this._els.modalAuth.hidden = false;
-    } else if (which === 'share') {
-      if (this._els.modalStyle) this._els.modalStyle.hidden = true;
-      if (this._els.modalOnline) this._els.modalOnline.hidden = true;
-      if (this._els.modalAuth) this._els.modalAuth.hidden = true;
-      if (this._els.modalShare) this._els.modalShare.hidden = false;
+      requestAnimationFrame(() => this._focusOnlineModalEntry());
     }
   }
 
@@ -701,7 +794,13 @@ export class GameUI {
   async _register() {
     const username = this._els.username.value.trim();
     const password = this._els.password.value;
-    if (this._els.authHint) this._els.authHint.textContent = '';
+    this._els.onlineHint.textContent = '';
+    if (!username || !password) {
+      this._els.onlineHint.textContent = '请先填写用户名与密码';
+      if (!username) this._els.username?.focus();
+      else this._els.password?.focus();
+      return;
+    }
     try {
       const data = await this._api('/api/auth/register', {
         method: 'POST',
@@ -719,7 +818,14 @@ export class GameUI {
       this._els.onlineUser.textContent = `已登录：${data.user.nickname}（Lv.${data.user.level}）`;
       this._connectSocketAndWire();
       this._updateOnlineAuthUi();
-      if (this._els.authHint) this._els.authHint.textContent = '注册成功';
+      this._els.onlineHint.textContent = '注册成功，已自动登录。可选择快速匹配或创建房间。';
+      requestAnimationFrame(() => {
+        try {
+          this._els.btnMatch?.focus();
+        } catch {
+          /* ignore */
+        }
+      });
     } catch (e) {
       if (this._els.authHint) this._els.authHint.textContent = e.message || '注册失败';
     }
@@ -728,7 +834,13 @@ export class GameUI {
   async _login() {
     const username = this._els.username.value.trim();
     const password = this._els.password.value;
-    if (this._els.authHint) this._els.authHint.textContent = '';
+    this._els.onlineHint.textContent = '';
+    if (!username || !password) {
+      this._els.onlineHint.textContent = '请先填写用户名与密码';
+      if (!username) this._els.username?.focus();
+      else this._els.password?.focus();
+      return;
+    }
     try {
       const data = await this._api('/api/auth/login', {
         method: 'POST',
@@ -742,7 +854,14 @@ export class GameUI {
       this._els.onlineUser.textContent = `已登录：${data.user.nickname}（Lv.${data.user.level}）`;
       this._connectSocketAndWire();
       this._updateOnlineAuthUi();
-      if (this._els.authHint) this._els.authHint.textContent = '登录成功';
+      this._els.onlineHint.textContent = '登录成功。可进行匹配、房间或观战。';
+      requestAnimationFrame(() => {
+        try {
+          this._els.btnMatch?.focus();
+        } catch {
+          /* ignore */
+        }
+      });
     } catch (e) {
       if (this._els.authHint) this._els.authHint.textContent = e.message || '登录失败';
     }
@@ -761,8 +880,10 @@ export class GameUI {
     localStorage.removeItem(LS_REFRESH);
     this._els.onlineUser.textContent = '';
     this._updateOnlineAuthUi();
-    if (this._els.authHint) this._els.authHint.textContent = '已退出';
-    if (this._els.onlineHint) this._els.onlineHint.textContent = '未登录：请先点击「去登录」';
+    this._els.onlineHint.textContent = '已退出登录';
+    if (this._els.modalOnline && !this._els.modalOnline.hidden) {
+      requestAnimationFrame(() => this._els.username?.focus());
+    }
   }
 
   _bind() {
@@ -780,6 +901,17 @@ export class GameUI {
       if (!scene || scene.networkMode !== 'replay') return;
       scene.replaySeek(Number(this._els.replaySlider.value));
       this.syncGameState(scene);
+    });
+
+    this._els.password?.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      this._login();
+    });
+    this._els.username?.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      this._els.password?.focus();
     });
 
     this._els.root.addEventListener('click', (e) => {
@@ -905,6 +1037,28 @@ export class GameUI {
       }
     };
     document.addEventListener('keydown', this._onDocKeydown);
+    this._bindHomeParallax();
+  }
+
+  /** 首页轻量视差：仅影响背景与指挥台位移，尊重 prefers-reduced-motion */
+  _bindHomeParallax() {
+    const el = this._els.mainMenu;
+    if (!el) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onMove = (e) => {
+      if (reduced.matches) return;
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--home-px', (px * 2).toFixed(4));
+      el.style.setProperty('--home-py', (py * 2).toFixed(4));
+    };
+    const onLeave = () => {
+      el.style.setProperty('--home-px', '0');
+      el.style.setProperty('--home-py', '0');
+    };
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerleave', onLeave);
   }
 
   openMainMenuFromGame() {

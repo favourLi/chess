@@ -27,7 +27,7 @@ function configurePBRMaterial(material, textures, repeatXY = null) {
     material.metalnessMap = textures.metallic;
     setupMapRepeat(textures.metallic, rx, ry);
     material.metalnessMap.colorSpace = THREE.NoColorSpace;
-    material.metalnessMap.anisotropy = 8;
+    material.metalnessMap.anisotropy = textures.metallic.anisotropy || 4;
   }
 
   material.map.colorSpace = THREE.SRGBColorSpace;
@@ -35,10 +35,11 @@ function configurePBRMaterial(material, textures, repeatXY = null) {
   material.roughnessMap.colorSpace = THREE.NoColorSpace;
   material.displacementMap.colorSpace = THREE.NoColorSpace;
 
-  material.map.anisotropy = 8;
-  material.normalMap.anisotropy = 8;
-  material.roughnessMap.anisotropy = 8;
-  material.displacementMap.anisotropy = 4;
+  const a = (t, fallback = 4) => (typeof t.anisotropy === 'number' ? t.anisotropy : fallback);
+  material.map.anisotropy = a(textures.baseColor, 8);
+  material.normalMap.anisotropy = a(textures.normal, 8);
+  material.roughnessMap.anisotropy = a(textures.roughness, 8);
+  material.displacementMap.anisotropy = a(textures.height, 4);
 
   // 高度贴图保留但不位移，避免与棋盘表面错位
   material.displacementScale = 0;

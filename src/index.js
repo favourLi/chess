@@ -1,6 +1,10 @@
 import * as THREE from 'three';
+import { textureManager } from './assets/textures/TextureManager.js';
 import { GameScene } from './scenes/GameScene.js';
 import { GameUI } from './ui/GameUI.js';
+
+/** 重复打开同一 URL 时走内存缓存，减轻二次进入负担 */
+THREE.Cache.enabled = true;
 
 class ChessGame {
   constructor() {
@@ -35,6 +39,10 @@ class ChessGame {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.14;
+
+    const cap = this.renderer.capabilities.getMaxAnisotropy();
+    const mobile = typeof window !== 'undefined' && window.matchMedia?.('(max-width: 768px)')?.matches;
+    textureManager.setMaxAnisotropy(Math.max(2, Math.min(8, Math.floor(cap * (mobile ? 0.65 : 1)))));
   }
 
   setupScene() {
@@ -86,6 +94,20 @@ class ChessGame {
       getGameScene: () => this.gameScene,
       applyStyleConfig: (cfg) => this.gameScene.applyStyleConfig(cfg)
     });
+
+    // 首帧后空闲时预取当前皮肤 PBR 与环境贴图，不阻塞进入菜单（命中缓存后切换皮肤更快）
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 800));
+    idle(
+      () => {
+        try {
+          textureManager.preloadTextures(textureManager.currentStyle);
+          textureManager.loadEnvMap(textureManager.currentStyle).catch(() => {});
+        } catch {
+          /* ignore */
+        }
+      },
+      { timeout: 5000 }
+    );
   }
 
   setupEventListeners() {
