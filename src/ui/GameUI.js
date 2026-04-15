@@ -230,7 +230,6 @@ export class GameUI {
               <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="leave-room">退出房间</button>
             </div>
             <div class="game-ui-hud-actions">
-              <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="undo">悔棋</button>
               <button type="button" class="game-ui-btn game-ui-btn--inline" data-ui="restart">重新开始</button>
               <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="home">回到首页</button>
               <button type="button" class="game-ui-btn game-ui-btn--ghost game-ui-btn--inline" data-ui="menu">菜单</button>

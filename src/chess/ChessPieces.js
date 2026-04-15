@@ -288,6 +288,10 @@ export class ChessPieces {
 
     // 重新初始化棋子
     this.setupInitialPosition();
+
+    // reset() 会重新创建 Mesh（默认材质为 createPieceMaterial），因此需要重新应用当前皮肤，
+    // 以恢复 PBR/贴图模板、emissive 基准值与文字贴图。
+    this.applySkinPreset(this._skinPreset);
   }
 
   removePiece(pieceMesh) {

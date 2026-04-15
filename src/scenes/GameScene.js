@@ -970,6 +970,15 @@ export class GameScene {
       this.pieces.reset();
     }
 
+    // 重开后棋子 Mesh 会重建，需要重新套用当前皮肤（棋盘也同步一次，避免局部贴图状态丢失）
+    try {
+      const skin = getSkinPreset(this.skinStyleId || STYLE_KEYS.CLASSICAL);
+      if (this.board) this.board.applySkinPreset(skin);
+      if (this.pieces) this.pieces.applySkinPreset(skin);
+    } catch {
+      /* ignore */
+    }
+
     if (this.cameraController) {
       this.cameraController.reset();
     }
