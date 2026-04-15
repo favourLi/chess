@@ -71,6 +71,7 @@ export class GameScene {
     this.animPreset = getAnimPreset(STYLE_KEYS.CLASSICAL);
     /** @type {string} 游戏风格，用于吃子音效等 */
     this.animStyleId = STYLE_KEYS.CLASSICAL;
+    this._lastTouchTap = null;
     this.init();
   }
 
@@ -286,9 +287,17 @@ export class GameScene {
     canvas.addEventListener('mouseup', (event) => this.onMouseUp(event));
 
     // 触摸事件（移动设备支持）
-    canvas.addEventListener('touchstart', (event) => this.onTouchStart(event));
-    canvas.addEventListener('touchmove', (event) => this.onTouchMove(event));
-    canvas.addEventListener('touchend', (event) => this.onTouchEnd(event));
+    // 重要：移动端触摸会合成 click；若同时处理 touch+click，容易造成“双触发”与页面闪白/高亮。
+    // 这里用非 passive 监听并在 touch 中 preventDefault，彻底阻断合成 click。
+    canvas.addEventListener('touchstart', (event) => this.onTouchStart(event), {
+      passive: false
+    });
+    canvas.addEventListener('touchmove', (event) => this.onTouchMove(event), {
+      passive: false
+    });
+    canvas.addEventListener('touchend', (event) => this.onTouchEnd(event), {
+      passive: false
+    });
 
     // 防止右键菜单
     canvas.addEventListener('contextmenu', (event) => event.preventDefault());
@@ -368,22 +377,27 @@ export class GameScene {
   }
 
   onTouchStart(event) {
-    if (event.touches.length === 1) {
-      const touch = event.touches[0];
-      this.onMouseClick(touch);
-    }
+    if (event.touches.length !== 1) return;
+    event.preventDefault();
+    const t = event.touches[0];
+    this._lastTouchTap = { x: t.clientX, y: t.clientY };
   }
 
   onTouchMove(event) {
-    if (event.touches.length === 1) {
-      event.preventDefault();
-      const touch = event.touches[0];
-      this.onMouseMove(touch);
-    }
+    if (event.touches.length !== 1) return;
+    event.preventDefault();
+    const t = event.touches[0];
+    // 仅悬停提示：按需更新鼠标位置与提示
+    this.onMouseMove({ clientX: t.clientX, clientY: t.clientY, target: event.target });
   }
 
   onTouchEnd(event) {
-    // 处理触摸结束
+    event.preventDefault();
+    const tap = this._lastTouchTap;
+    this._lastTouchTap = null;
+    if (!tap) return;
+    // 以 touchend 为准触发一次“点击”
+    this.onMouseClick({ clientX: tap.x, clientY: tap.y, target: event.target });
   }
 
   updateMousePosition(event) {
