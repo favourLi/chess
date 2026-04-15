@@ -7,7 +7,7 @@
     "dev": "webpack serve --mode development",
     "server:dev": "node server/index.js",
     "dev:full": "concurrently -k \"npm run server:dev\" \"npm run dev\"",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production && node scripts/gzip-dist.js",
     "start": "node server/index.js",
     "build:server": "webpack --config server/webpack.config.js --mode production",
     "test": "jest --config jest.config.cjs",
