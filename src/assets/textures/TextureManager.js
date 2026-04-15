@@ -29,7 +29,7 @@ export class TextureManager {
     this.envMapLoadingCache = new Map();
     /** 环境贴图文件名映射 */
     this.envMapFiles = {
-      classical: 'classical.exr',
+      classical: 'output_compressed_exr.exr',
       modern: 'modern.exr',
       fantasy: 'fantasy.exr',
       war: 'war.exr'
