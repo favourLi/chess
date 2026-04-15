@@ -11,6 +11,8 @@ import { WAR_PBR_TEXTURES } from './war/warTextureUrls.js';
 export class TextureManager {
   constructor() {
     this.currentStyle = 'classical'; // 默认风格
+    /** 各向异性上限（由渲染器能力 + 移动端策略在 index.js 中注入） */
+    this._maxAnisotropy = 8;
     this.textures = {
       classical: CLASSICAL_PBR_TEXTURES,
       modern: MODERN_PBR_TEXTURES,
@@ -32,6 +34,15 @@ export class TextureManager {
       fantasy: 'fantasy.exr',
       war: 'war.exr'
     };
+  }
+
+  /**
+   * 由入口在 WebGLRenderer 就绪后调用，避免超过 GPU 支持并略降移动端采样成本。
+   * @param {number} value
+   */
+  setMaxAnisotropy(value) {
+    const n = Number(value);
+    if (Number.isFinite(n) && n >= 1) this._maxAnisotropy = Math.floor(n);
   }
 
   /**
@@ -134,13 +145,62 @@ export class TextureManager {
       return this.loadingCache.get(textureUrl);
     }
 
-    // 创建加载 Promise
-    const promise = new Promise((resolve, reject) => {
+    const canTryBitmap =
+      typeof createImageBitmap === 'function' &&
+      /\.(png|jpe?g|webp)$/i.test(String(textureUrl).split('?')[0] || '');
+
+    const promise = canTryBitmap
+      ? this._loadTextureViaImageBitmap(textureUrl)
+      : this._loadTextureViaImageElement(textureUrl);
+
+    this.loadingCache.set(textureUrl, promise);
+    return promise;
+  }
+
+  /**
+   * fetch + createImageBitmap：多数 Chromium 内核上解码路径更快，失败则回退到 Image。
+   * @param {string} textureUrl
+   * @returns {Promise<THREE.Texture>}
+   */
+  async _loadTextureViaImageBitmap(textureUrl) {
+    try {
+      const res = await fetch(textureUrl);
+      if (!res.ok) throw new Error(String(res.status));
+      const blob = await res.blob();
+      let bitmap;
+      try {
+        bitmap = await createImageBitmap(blob, {
+          premultiplyAlpha: 'none',
+          colorSpaceConversion: 'none'
+        });
+      } catch {
+        bitmap = await createImageBitmap(blob);
+      }
+      const texture = new THREE.Texture(bitmap);
+      texture.needsUpdate = true;
+      texture.flipY = true;
+      texture.generateMipmaps = true;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.anisotropy = this._maxAnisotropy;
+      this.textureCache.set(textureUrl, texture);
+      this.loadingCache.delete(textureUrl);
+      return texture;
+    } catch {
+      return this._loadTextureViaImageElement(textureUrl);
+    }
+  }
+
+  /**
+   * @param {string} textureUrl
+   * @returns {Promise<THREE.Texture>}
+   */
+  _loadTextureViaImageElement(textureUrl) {
+    return new Promise((resolve, reject) => {
       this.loader.load(
         textureUrl,
         (texture) => {
-          // 设置各向异性过滤以提高纹理质量
-          texture.anisotropy = 8;
+          texture.anisotropy = this._maxAnisotropy;
           this.textureCache.set(textureUrl, texture);
           this.loadingCache.delete(textureUrl);
           resolve(texture);
@@ -152,9 +212,6 @@ export class TextureManager {
         }
       );
     });
-
-    this.loadingCache.set(textureUrl, promise);
-    return promise;
   }
 
   /**
